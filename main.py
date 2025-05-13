@@ -3,8 +3,7 @@ import logging
 import sys
 from os import getenv
 
-
-from aiogram import Bot, Dispatcher, html
+from aiogram import Bot, Dispatcher, html,F
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart
@@ -46,6 +45,16 @@ async def echo_handler(message: Message) -> None:
         await message.send_copy(chat_id=message.chat.id)
     except TypeError:
         await message.answer("Nice try!")
+
+@dp.message(F.text=='getMe')
+async def get_me(message: Message) -> None:
+    chat_id = message.chat.id
+    fullname = message.from_user.full_name
+    text = message.text
+    await  message.answer(f"Custom {message}!\n"
+                          f"chat_id = {chat_id}\n"
+                          f"fullname = {fullname}\n"
+                          f"text = {text}")
 
 
 async def main() -> None:
