@@ -2,6 +2,7 @@ import asyncio
 import logging
 import sys
 from os import getenv
+import datetime
 
 from aiogram import Bot, Dispatcher, html,F
 from aiogram.client.default import DefaultBotProperties
@@ -33,28 +34,38 @@ async def command_start_handler(message: Message) -> None:
     await message.answer(f"Hello, {html.bold(message.from_user.full_name)}!")
 
 
+# @dp.message()
+# async def echo_handler(message: Message) -> None:
+#     """
+#     Handler will forward receive a message back to the sender
+#
+#     By default, message handler will handle all message types (like a text, photo, sticker etc.)
+#     """
+#     try:
+#         # Send a copy of the received message
+#         await message.send_copy(chat_id=message.chat.id)
+#     except TypeError:
+#         await message.answer("Nice try!")
+#
+# @dp.message(F.text=='getMe')
+# async def get_me(message: Message) -> None:
+#     chat_id = message.chat.id
+#     fullname = message.from_user.full_name
+#     text = message.text
+#     await  message.answer(f"Custom {message}!\n"
+#                           f"chat_id = {chat_id}\n"
+#                           f"fullname = {fullname}\n"
+#                           f"text = {text}")
+from datetime import datetime
 @dp.message()
-async def echo_handler(message: Message) -> None:
-    """
-    Handler will forward receive a message back to the sender
+async def get_year(message: str) -> None:
+    date_str =message
+    date_obj = datetime.strptime(date_str, "%Y-%m-%d")
+    year = date_obj.year
+    year2=datetime.today().year-year
 
-    By default, message handler will handle all message types (like a text, photo, sticker etc.)
-    """
-    try:
-        # Send a copy of the received message
-        await message.send_copy(chat_id=message.chat.id)
-    except TypeError:
-        await message.answer("Nice try!")
+    await  (f"sizning yoshingiz {year2} da")
 
-@dp.message(F.text=='getMe')
-async def get_me(message: Message) -> None:
-    chat_id = message.chat.id
-    fullname = message.from_user.full_name
-    text = message.text
-    await  message.answer(f"Custom {message}!\n"
-                          f"chat_id = {chat_id}\n"
-                          f"fullname = {fullname}\n"
-                          f"text = {text}")
 
 
 async def main() -> None:
@@ -66,3 +77,5 @@ async def main() -> None:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     asyncio.run(main())
+
+# regex need for this should write to google i hate rejex
