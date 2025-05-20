@@ -15,5 +15,12 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/tg_users</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="quiz_dbb@localhost" uuid="b59e1f0b-466b-4658-a2f0-a6e1f767dddb">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/quiz_dbb</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
