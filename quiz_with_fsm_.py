@@ -12,6 +12,7 @@ from aiogram.types import Message, ReplyKeyboardMarkup, ReplyKeyboardRemove, Key
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from aiogram.client.default import DefaultBotProperties
+from aiogram.utils.keyboard import ReplyKeyboardBuilder
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -29,8 +30,8 @@ def save_to_database(message: Message,count_true=0,count_false=0):
     )
     chat_ids=message.chat.id
     cur = conn.cursor()
-    cur.execute("""create table if not exists results(chat_id integer, correct integer,incorrect integer) ;""")
-    cur.execute(f"insert into results (chat_id,correct,incorrect) values ({chat_ids},{count_true},{count_false})")
+    cur.execute("""create table if not exists results_of(chat_id integer, correct integer,incorrect integer) ;""")
+    cur.execute(f"insert into results_of (chat_id,correct,incorrect) values ({chat_ids},{count_true},{count_false})")
     conn.commit()
     cur.close()
     conn.close()
@@ -44,7 +45,7 @@ def results_shower():
     )
 
     cur = conn.cursor()
-    cur.execute(f"select * from results ")
+    cur.execute(f"select * from results_of ")
     results=cur.fetchall()
     cur.close()
     conn.close()
@@ -68,10 +69,17 @@ class QuizState(StatesGroup):
     confirm=State()
     playing=State()
 
+# def make_keyboard(options,rows):
+#     button=[KeyboardButton(text=o) for o in options ]
+#     keyboard=[button[i:i+rows] for i in range(0,len(button),rows)]
+#     return ReplyKeyboardMarkup(keyboard=keyboard,resize_keyboard=True)
+
 def make_keyboard(options,rows):
-    button=[KeyboardButton(text=o) for o in options ]
-    keyboard=[button[i:i+rows] for i in range(0,len(button),rows)]
-    return ReplyKeyboardMarkup(keyboard=keyboard,resize_keyboard=True)
+    builder=ReplyKeyboardBuilder()
+    for o in options:
+        builder.button(text=o)
+        builder.adjust(rows)
+    return builder.as_markup(resize_keyboard=True,input_field_placeholder="tanlang",one_time_keyboard=True)
 
 @dp.message(CommandStart())
 async def start_handler(message:Message):
@@ -142,7 +150,7 @@ count_false=0
 @dp.message(QuizState.playing)
 async def answer_handler(message:Message, state:FSMContext):
     data= await state.get_data()
-    step=  data.get("step",0)
+    step= data.get("step",0)
     q=questions[step]
     if message.text == q.correct_answer:
         global count_true
