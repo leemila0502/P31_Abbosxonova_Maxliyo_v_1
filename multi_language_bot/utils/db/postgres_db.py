@@ -36,6 +36,7 @@ class PsqlDB:
             return result[0]
 
 
+
 pg=PsqlDB()
 if __name__=="__main__":
     # print(getenv("DB_NAME"))

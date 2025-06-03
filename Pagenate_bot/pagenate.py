@@ -17,7 +17,7 @@ TOKEN = getenv("BOT_TOKEN")
 
 dp = Dispatcher()
 
-smiles = ['☹️ Upset', '🙂 Smile', '🤩 Happy', '😡 Angry']
+
 
 
 class PageCallbackData(CallbackData, prefix='page'):  # 'page:next:1' yoki 'page:prev:1'

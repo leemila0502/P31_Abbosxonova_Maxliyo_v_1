@@ -2,7 +2,9 @@ import requests
 import json
 from multi_language_bot.App import TOKEN
 
-res=requests.get(f'https://api.telegram.org/bot{TOKEN}/getMe')
-res_json=json.loads(res.text)
+res = requests.get(f'https://api.telegram.org/bot{TOKEN}/getMe')
+res_json = json.loads(res.text)
 
-print(res_json)
+
+if __name__ == "__main__":
+    print(res_json)
