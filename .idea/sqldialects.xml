@@ -3,7 +3,5 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/inform_/main.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/inform_/quiz_with_fsm.py" dialect="GenericSQL" />
-    <file url="file://$PROJECT_DIR$/multi_language_bot/Questions/questions.py" dialect="GenericSQL" />
-    <file url="file://$PROJECT_DIR$/quiz_with_fsm_.py" dialect="GenericSQL" />
   </component>
 </project>

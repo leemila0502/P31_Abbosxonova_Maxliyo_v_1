@@ -46,7 +46,7 @@ class Users(Base):
     @staticmethod
     async def get_all():
         async with SessionLocal() as session:
-            result = await session.execute(select(Users.first_name , Users.chat_id))
+            result = await session.execute(select(Users.first_name, Users.chat_id))
             return result.all()
 
     @staticmethod
@@ -59,7 +59,6 @@ class Users(Base):
                 await session.commit()
                 return True
             return False
-
 
     # @staticmethod
     # async def update(chat_id, **kwargs):
@@ -74,12 +73,11 @@ class Users(Base):
     #             return True
     #         return False
 
-
     @staticmethod
-    async def update(chat_id,**kwargs):
+    async def update(chat_id, **kwargs):
         async with SessionLocal() as session:
-            result=await session.execute(select(Users).where(Users.chat_id==chat_id))
-            user= result.scalar_one_or_none()
+            result = await session.execute(select(Users).where(Users.chat_id == chat_id))
+            user = result.scalar_one_or_none()
             if user:
                 for key, value in kwargs.items():
                     if hasattr(user, key):
@@ -89,11 +87,11 @@ class Users(Base):
                 return True
             return False
 
-
     @staticmethod
     async def add_user(**kwargs):
         async with SessionLocal() as session:
-            await session.add(**kwargs)
+            user = Users(**kwargs)
+            session.add(user)
             await session.commit()
 
 

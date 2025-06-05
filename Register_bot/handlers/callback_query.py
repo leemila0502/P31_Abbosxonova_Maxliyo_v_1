@@ -28,7 +28,7 @@ async def start_cmd(message: Message):
     await message.answer("Xush kelibsiz! Quyidagi menyudan foydalaning:", reply_markup=main_menu(is_admin))
 
 
-@callback_router.message( F.text=="/Registration")
+@callback_router.message(F.text == "/Registration")
 async def start_cmd(message: Message):
     is_admin = message.chat.id in ADMIN
     await us.create_or_update_user({
@@ -59,17 +59,17 @@ async def view_me(call: CallbackQuery):
         await call.message.answer("Ma'lumot topilmadi.")
 
 
-
 @callback_router.callback_query(F.data == "delete_user")
-async def delete_me(call: CallbackQuery,state: FSMContext):
+async def delete_me(call: CallbackQuery, state: FSMContext):
     await state.set_state(Chat_idState.chat_id)
     await call.message.answer("Foydalanuvchi chat_id sini kiriting:")
 
+
 @callback_router.message(Chat_idState.chat_id)
-async def delete_user(message:Message,state: FSMContext):
+async def delete_user(message: Message, state: FSMContext):
     await state.update_data(chat_id=message.text)
-    data=await state.get_data()
-    chat_id=data.get("chat_id")
+    data = await state.get_data()
+    chat_id = data.get("chat_id")
 
     user = await us.get_by_chat_id(chat_id)
     if user:
@@ -77,7 +77,6 @@ async def delete_user(message:Message,state: FSMContext):
         await message.answer("👌 Ma'lumotlar o'chirildi!")
     else:
         await message.answer("🤦‍ Ma'lumot topilmadi !")
-
 
 
 @callback_router.callback_query(F.data == "delete_user")
@@ -88,6 +87,7 @@ async def delete_me(call: CallbackQuery):
         await call.message.answer("🤦‍♀️ Ma'lumotlar o'chirildi!")
     else:
         await call.message.answer("🤦‍ Ma'lumot topilmadi !")
+
 
 @callback_router.callback_query(F.data == "update_me")
 async def update_me(call: CallbackQuery, state: FSMContext):
@@ -147,9 +147,6 @@ async def update_address(message: Message, state: FSMContext):
     await state.clear()
 
 
-
-
-
 @callback_router.callback_query(F.data == "view_users")
 async def view_users(call: CallbackQuery):
     users = await us.get_all()
@@ -162,10 +159,12 @@ async def view_users(call: CallbackQuery):
 
         await call.message.answer(text, parse_mode="HTML")
 
+
 @callback_router.callback_query(F.data == "add_user")
 async def add_user(call: CallbackQuery, state: FSMContext):
     await call.message.answer("Ismni kiriting=>")
     await state.set_state(AddUserState.first_name)
+
 
 @callback_router.message(AddUserState.first_name)
 async def fist_name(message: Message, state: FSMContext):
@@ -173,23 +172,27 @@ async def fist_name(message: Message, state: FSMContext):
     await message.answer("Familiyani kiriting:")
     await state.set_state(AddUserState.last_name)
 
+
 @callback_router.message(AddUserState.last_name)
 async def last_name(message: Message, state: FSMContext):
     await state.update_data(last_name=message.text)
     await message.answer("Emailni kiriting:")
     await state.set_state(AddUserState.email)
 
+
 @callback_router.message(AddUserState.email)
 async def email(message: Message, state: FSMContext):
     await state.update_data(email=message.text)
     await message.answer("Telefon raqamni kiriting:")
-    await state.set_state(AddUserState.email)
+    await state.set_state(AddUserState.phone)
+
 
 @callback_router.message(AddUserState.phone)
 async def phone(message: Message, state: FSMContext):
     await state.update_data(phone=message.text)
-    await message.answer("<UNK> Manzilni kiriting:")
+    await message.answer(" Manzilni kiriting:")
     await state.set_state(AddUserState.address)
+
 
 @callback_router.message(AddUserState.address)
 async def address(message: Message, state: FSMContext):
@@ -197,31 +200,25 @@ async def address(message: Message, state: FSMContext):
     await message.answer("Chat_id ni kiriting:")
     await state.set_state(AddUserState.chat_id)
 
+
 @callback_router.message(AddUserState.chat_id)
 async def chat_idd(message: Message, state: FSMContext):
     await state.update_data(chat_id=message.text)
     await message.answer("Username ni kiriting:")
     await state.set_state(AddUserState.username)
 
+
 @callback_router.message(AddUserState.username)
 async def username(message: Message, state: FSMContext):
     await state.update_data(username=message.text)
-    data=await state.get_data()
-    email=data.get("email")
-    phone=data.get("phone")
-    first_name=data.get("first_name")
-    last_name=data.get("last_name")
-    address=data.get("address")
-    chat_id=data.get("chat_id")
-    username=data.get("username")
-    await us.add_user(email=email,phone=phone,first_name=first_name,last_name=last_name,address=address,chat_id=chat_id,username=username)
+    data = await state.get_data()
+    email = data.get("email")
+    phone = data.get("phone")
+    first_name = data.get("first_name")
+    last_name = data.get("last_name")
+    address = data.get("address")
+    chat_id = data.get("chat_id")
+    username = data.get("username")
+    await us.add_user(phone=phone, email=email, first_name=first_name, last_name=last_name, address=address,
+                      chat_id=chat_id, username=username)
     await state.clear()
-
-
-
-
-
-
-
-
-
